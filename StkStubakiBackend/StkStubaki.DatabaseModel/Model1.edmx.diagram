@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f773848100f04adc9d597e40b4165d69" Name="Diagram1">
+        <EntityTypeShape EntityType="StkStubakiModel.Igrac" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.IgraZza" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Korisnici" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Mec" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Momcad" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Natjece" Width="1.5" PointX="5.25" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Par" Width="1.5" PointX="10.5" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.SetMec" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.SetPar" Width="1.5" PointX="12.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Sezona" Width="1.5" PointX="6" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="StkStubakiModel.Utakmica" Width="1.5" PointX="8.25" PointY="14.125" IsExpanded="true" />
+        <AssociationConnector Association="StkStubakiModel.FK_igraza_igrac" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_mec_domaciigrac" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_mec_gostujuciigrac" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_momcad_voditelj" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_par_domacin1" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_par_domacin2" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_par_gost1" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_par_gost2" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_igraza_momcad" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_mec_utakmica" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_set_mec" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_natjece_momcad" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_utakmica_momcad" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_utakmica_momcad1" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_par_utakmica" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_setpar_par" ManuallyRouted="false" />
+        <AssociationConnector Association="StkStubakiModel.FK_utakmica_sezona" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

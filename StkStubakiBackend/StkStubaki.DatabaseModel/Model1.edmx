@@ -1,0 +1,1049 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="StkStubakiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Igrac">
+          <Key>
+            <PropertyRef Name="IdIgrac" />
+          </Key>
+          <Property Name="IdIgrac" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Prezime" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="GodRodjenja" Type="varchar" MaxLength="4" />
+          <Property Name="BrTel" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="20" />
+          <Property Name="Drvo" Type="varchar" MaxLength="30" />
+          <Property Name="CrnaStrana" Type="varchar" MaxLength="30" />
+          <Property Name="CrvenaStrana" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="IgraZza">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+            <PropertyRef Name="IdIgrac" />
+          </Key>
+          <Property Name="SifraSezona" Type="int" Nullable="false" />
+          <Property Name="IdIgrac" Type="int" Nullable="false" />
+          <Property Name="IdMomcad" Type="int" Nullable="false" />
+          <Property Name="BrPobjeda" Type="int" />
+          <Property Name="BrPoraza" Type="int" />
+        </EntityType>
+        <EntityType Name="Korisnici">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Ovlasti" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mec">
+          <Key>
+            <PropertyRef Name="IdMec" />
+          </Key>
+          <Property Name="IdMec" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RedniBrMec" Type="int" Nullable="false" />
+          <Property Name="IdUtakmica" Type="int" Nullable="false" />
+          <Property Name="IdDomaciIgrac" Type="int" />
+          <Property Name="IdGostujuciIgrac" Type="int" />
+          <Property Name="DobSetoviDom" Type="int" />
+          <Property Name="DobSetoviGost" Type="int" />
+        </EntityType>
+        <EntityType Name="Momcad">
+          <Key>
+            <PropertyRef Name="IdMomcad" />
+          </Key>
+          <Property Name="IdMomcad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdVoditelj" Type="int" />
+        </EntityType>
+        <EntityType Name="Natjece">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+            <PropertyRef Name="IdMomcad" />
+          </Key>
+          <Property Name="SifraSezona" Type="int" Nullable="false" />
+          <Property Name="IdMomcad" Type="int" Nullable="false" />
+          <Property Name="BrUtakmica" Type="int" />
+          <Property Name="BrPobjeda" Type="int" />
+          <Property Name="BrPoraza" Type="int" />
+          <Property Name="BrNerijesenih" Type="int" />
+          <Property Name="DobiveniMecevi" Type="int" />
+          <Property Name="IzgubljeniMecevi" Type="int" />
+          <Property Name="BrBodova" Type="int" />
+          <Property Name="Kazna" Type="int" />
+          <Property Name="OpisKazne" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Par">
+          <Key>
+            <PropertyRef Name="IdPar" />
+          </Key>
+          <Property Name="IdPar" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUtakmica" Type="int" Nullable="false" />
+          <Property Name="IdDomacin1" Type="int" Nullable="false" />
+          <Property Name="IdDomacin2" Type="int" Nullable="false" />
+          <Property Name="IdGost1" Type="int" Nullable="false" />
+          <Property Name="IdGost2" Type="int" Nullable="false" />
+          <Property Name="SetoviDomacin" Type="int" Nullable="false" />
+          <Property Name="SetoviGost" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SetMec">
+          <Key>
+            <PropertyRef Name="IdSet" />
+          </Key>
+          <Property Name="IdSet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RedniBrSet" Type="int" Nullable="false" />
+          <Property Name="PoenDom" Type="int" Nullable="false" />
+          <Property Name="PoenGost" Type="int" Nullable="false" />
+          <Property Name="IdMec" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SetPar">
+          <Key>
+            <PropertyRef Name="IdSetPar" />
+          </Key>
+          <Property Name="RedniBroj" Type="int" Nullable="false" />
+          <Property Name="RezD" Type="int" Nullable="false" />
+          <Property Name="RezG" Type="int" Nullable="false" />
+          <Property Name="IdSetPar" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPar" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sezona">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+          </Key>
+          <Property Name="SifraSezona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Godina" Type="varchar" MaxLength="9" Nullable="false" />
+          <Property Name="Liga" Type="varchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Utakmica">
+          <Key>
+            <PropertyRef Name="IdUtakmica" />
+          </Key>
+          <Property Name="IdUtakmica" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SifraSezona" Type="int" Nullable="false" />
+          <Property Name="IdDomacin" Type="int" Nullable="false" />
+          <Property Name="IdGost" Type="int" Nullable="false" />
+          <Property Name="Kolo" Type="int" Nullable="false" />
+          <Property Name="RezDomacin" Type="int" />
+          <Property Name="RezGost" Type="int" />
+          <Property Name="BrSetDomacin" Type="int" />
+          <Property Name="BrSetGost" Type="int" />
+          <Property Name="Liga" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="Zakljucano" Type="int" />
+          <Property Name="Korisnik" Type="int" />
+          <Property Name="Akcija" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_igraza_igrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="IgraZza" Type="Self.IgraZza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="IgraZza">
+              <PropertyRef Name="IdIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_igraza_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="IgraZza" Type="Self.IgraZza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="IgraZza">
+              <PropertyRef Name="IdMomcad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_domaciigrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdDomaciIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_gostujuciigrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdGostujuciIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_utakmica">
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utakmica">
+              <PropertyRef Name="IdUtakmica" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdUtakmica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_momcad_voditelj">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Momcad">
+              <PropertyRef Name="IdVoditelj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_natjece_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Natjece" Type="Self.Natjece" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Natjece">
+              <PropertyRef Name="IdMomcad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_domacin1">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdDomacin1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_domacin2">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdDomacin2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_gost1">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdGost1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_gost2">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdGost2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_utakmica">
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utakmica">
+              <PropertyRef Name="IdUtakmica" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdUtakmica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_set_mec">
+          <End Role="Mec" Type="Self.Mec" Multiplicity="1" />
+          <End Role="SetMec" Type="Self.SetMec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mec">
+              <PropertyRef Name="IdMec" />
+            </Principal>
+            <Dependent Role="SetMec">
+              <PropertyRef Name="IdMec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_setpar_par">
+          <End Role="Par" Type="Self.Par" Multiplicity="1" />
+          <End Role="SetPar" Type="Self.SetPar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Par">
+              <PropertyRef Name="IdPar" />
+            </Principal>
+            <Dependent Role="SetPar">
+              <PropertyRef Name="IdPar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="IdDomacin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_momcad1">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="IdGost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_sezona">
+          <End Role="Sezona" Type="Self.Sezona" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sezona">
+              <PropertyRef Name="SifraSezona" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="SifraSezona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StkStubakiModelStoreContainer">
+          <EntitySet Name="Igrac" EntityType="Self.Igrac" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IgraZza" EntityType="Self.IgraZza" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Korisnici" EntityType="Self.Korisnici" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mec" EntityType="Self.Mec" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Momcad" EntityType="Self.Momcad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Natjece" EntityType="Self.Natjece" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Par" EntityType="Self.Par" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SetMec" EntityType="Self.SetMec" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SetPar" EntityType="Self.SetPar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sezona" EntityType="Self.Sezona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Utakmica" EntityType="Self.Utakmica" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_igraza_igrac" Association="Self.FK_igraza_igrac">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="IgraZza" EntitySet="IgraZza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_igraza_momcad" Association="Self.FK_igraza_momcad">
+            <End Role="Momcad" EntitySet="Momcad" />
+            <End Role="IgraZza" EntitySet="IgraZza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_domaciigrac" Association="Self.FK_mec_domaciigrac">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Mec" EntitySet="Mec" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_gostujuciigrac" Association="Self.FK_mec_gostujuciigrac">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Mec" EntitySet="Mec" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_utakmica" Association="Self.FK_mec_utakmica">
+            <End Role="Utakmica" EntitySet="Utakmica" />
+            <End Role="Mec" EntitySet="Mec" />
+          </AssociationSet>
+          <AssociationSet Name="FK_momcad_voditelj" Association="Self.FK_momcad_voditelj">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Momcad" EntitySet="Momcad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_natjece_momcad" Association="Self.FK_natjece_momcad">
+            <End Role="Momcad" EntitySet="Momcad" />
+            <End Role="Natjece" EntitySet="Natjece" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_domacin1" Association="Self.FK_par_domacin1">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Par" EntitySet="Par" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_domacin2" Association="Self.FK_par_domacin2">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Par" EntitySet="Par" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_gost1" Association="Self.FK_par_gost1">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Par" EntitySet="Par" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_gost2" Association="Self.FK_par_gost2">
+            <End Role="Igrac" EntitySet="Igrac" />
+            <End Role="Par" EntitySet="Par" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_utakmica" Association="Self.FK_par_utakmica">
+            <End Role="Utakmica" EntitySet="Utakmica" />
+            <End Role="Par" EntitySet="Par" />
+          </AssociationSet>
+          <AssociationSet Name="FK_set_mec" Association="Self.FK_set_mec">
+            <End Role="Mec" EntitySet="Mec" />
+            <End Role="SetMec" EntitySet="SetMec" />
+          </AssociationSet>
+          <AssociationSet Name="FK_setpar_par" Association="Self.FK_setpar_par">
+            <End Role="Par" EntitySet="Par" />
+            <End Role="SetPar" EntitySet="SetPar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_momcad" Association="Self.FK_utakmica_momcad">
+            <End Role="Momcad" EntitySet="Momcad" />
+            <End Role="Utakmica" EntitySet="Utakmica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_momcad1" Association="Self.FK_utakmica_momcad1">
+            <End Role="Momcad" EntitySet="Momcad" />
+            <End Role="Utakmica" EntitySet="Utakmica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_sezona" Association="Self.FK_utakmica_sezona">
+            <End Role="Sezona" EntitySet="Sezona" />
+            <End Role="Utakmica" EntitySet="Utakmica" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StkStubakiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Igrac">
+          <Key>
+            <PropertyRef Name="IdIgrac" />
+          </Key>
+          <Property Name="IdIgrac" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ime" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GodRodjenja" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="BrTel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Drvo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CrnaStrana" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CrvenaStrana" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IgraZzas" Relationship="Self.FK_igraza_igrac" FromRole="Igrac" ToRole="IgraZza" />
+          <NavigationProperty Name="Mecs" Relationship="Self.FK_mec_domaciigrac" FromRole="Igrac" ToRole="Mec" />
+          <NavigationProperty Name="Mecs1" Relationship="Self.FK_mec_gostujuciigrac" FromRole="Igrac" ToRole="Mec" />
+          <NavigationProperty Name="Momcads" Relationship="Self.FK_momcad_voditelj" FromRole="Igrac" ToRole="Momcad" />
+          <NavigationProperty Name="Pars" Relationship="Self.FK_par_domacin1" FromRole="Igrac" ToRole="Par" />
+          <NavigationProperty Name="Pars1" Relationship="Self.FK_par_domacin2" FromRole="Igrac" ToRole="Par" />
+          <NavigationProperty Name="Pars2" Relationship="Self.FK_par_gost1" FromRole="Igrac" ToRole="Par" />
+          <NavigationProperty Name="Pars3" Relationship="Self.FK_par_gost2" FromRole="Igrac" ToRole="Par" />
+        </EntityType>
+        <EntityType Name="IgraZza">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+            <PropertyRef Name="IdIgrac" />
+          </Key>
+          <Property Name="SifraSezona" Type="Int32" Nullable="false" />
+          <Property Name="IdIgrac" Type="Int32" Nullable="false" />
+          <Property Name="IdMomcad" Type="Int32" Nullable="false" />
+          <Property Name="BrPobjeda" Type="Int32" />
+          <Property Name="BrPoraza" Type="Int32" />
+          <NavigationProperty Name="Igrac" Relationship="Self.FK_igraza_igrac" FromRole="IgraZza" ToRole="Igrac" />
+          <NavigationProperty Name="Momcad" Relationship="Self.FK_igraza_momcad" FromRole="IgraZza" ToRole="Momcad" />
+        </EntityType>
+        <EntityType Name="Korisnici">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ovlasti" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mec">
+          <Key>
+            <PropertyRef Name="IdMec" />
+          </Key>
+          <Property Name="IdMec" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RedniBrMec" Type="Int32" Nullable="false" />
+          <Property Name="IdUtakmica" Type="Int32" Nullable="false" />
+          <Property Name="IdDomaciIgrac" Type="Int32" />
+          <Property Name="IdGostujuciIgrac" Type="Int32" />
+          <Property Name="DobSetoviDom" Type="Int32" />
+          <Property Name="DobSetoviGost" Type="Int32" />
+          <NavigationProperty Name="Igrac" Relationship="Self.FK_mec_domaciigrac" FromRole="Mec" ToRole="Igrac" />
+          <NavigationProperty Name="Igrac1" Relationship="Self.FK_mec_gostujuciigrac" FromRole="Mec" ToRole="Igrac" />
+          <NavigationProperty Name="Utakmica" Relationship="Self.FK_mec_utakmica" FromRole="Mec" ToRole="Utakmica" />
+          <NavigationProperty Name="SetMecs" Relationship="Self.FK_set_mec" FromRole="Mec" ToRole="SetMec" />
+        </EntityType>
+        <EntityType Name="Momcad">
+          <Key>
+            <PropertyRef Name="IdMomcad" />
+          </Key>
+          <Property Name="IdMomcad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdVoditelj" Type="Int32" />
+          <NavigationProperty Name="Igrac" Relationship="Self.FK_momcad_voditelj" FromRole="Momcad" ToRole="Igrac" />
+          <NavigationProperty Name="IgraZzas" Relationship="Self.FK_igraza_momcad" FromRole="Momcad" ToRole="IgraZza" />
+          <NavigationProperty Name="Natjeces" Relationship="Self.FK_natjece_momcad" FromRole="Momcad" ToRole="Natjece" />
+          <NavigationProperty Name="Utakmicas" Relationship="Self.FK_utakmica_momcad" FromRole="Momcad" ToRole="Utakmica" />
+          <NavigationProperty Name="Utakmicas1" Relationship="Self.FK_utakmica_momcad1" FromRole="Momcad" ToRole="Utakmica" />
+        </EntityType>
+        <EntityType Name="Natjece">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+            <PropertyRef Name="IdMomcad" />
+          </Key>
+          <Property Name="SifraSezona" Type="Int32" Nullable="false" />
+          <Property Name="IdMomcad" Type="Int32" Nullable="false" />
+          <Property Name="BrUtakmica" Type="Int32" />
+          <Property Name="BrPobjeda" Type="Int32" />
+          <Property Name="BrPoraza" Type="Int32" />
+          <Property Name="BrNerijesenih" Type="Int32" />
+          <Property Name="DobiveniMecevi" Type="Int32" />
+          <Property Name="IzgubljeniMecevi" Type="Int32" />
+          <Property Name="BrBodova" Type="Int32" />
+          <Property Name="Kazna" Type="Int32" />
+          <Property Name="OpisKazne" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Momcad" Relationship="Self.FK_natjece_momcad" FromRole="Natjece" ToRole="Momcad" />
+        </EntityType>
+        <EntityType Name="Par">
+          <Key>
+            <PropertyRef Name="IdPar" />
+          </Key>
+          <Property Name="IdPar" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUtakmica" Type="Int32" Nullable="false" />
+          <Property Name="IdDomacin1" Type="Int32" Nullable="false" />
+          <Property Name="IdDomacin2" Type="Int32" Nullable="false" />
+          <Property Name="IdGost1" Type="Int32" Nullable="false" />
+          <Property Name="IdGost2" Type="Int32" Nullable="false" />
+          <Property Name="SetoviDomacin" Type="Int32" Nullable="false" />
+          <Property Name="SetoviGost" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Igrac" Relationship="Self.FK_par_domacin1" FromRole="Par" ToRole="Igrac" />
+          <NavigationProperty Name="Igrac1" Relationship="Self.FK_par_domacin2" FromRole="Par" ToRole="Igrac" />
+          <NavigationProperty Name="Igrac2" Relationship="Self.FK_par_gost1" FromRole="Par" ToRole="Igrac" />
+          <NavigationProperty Name="Igrac3" Relationship="Self.FK_par_gost2" FromRole="Par" ToRole="Igrac" />
+          <NavigationProperty Name="Utakmica" Relationship="Self.FK_par_utakmica" FromRole="Par" ToRole="Utakmica" />
+          <NavigationProperty Name="SetPars" Relationship="Self.FK_setpar_par" FromRole="Par" ToRole="SetPar" />
+        </EntityType>
+        <EntityType Name="SetMec">
+          <Key>
+            <PropertyRef Name="IdSet" />
+          </Key>
+          <Property Name="IdSet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RedniBrSet" Type="Int32" Nullable="false" />
+          <Property Name="PoenDom" Type="Int32" Nullable="false" />
+          <Property Name="PoenGost" Type="Int32" Nullable="false" />
+          <Property Name="IdMec" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Mec" Relationship="Self.FK_set_mec" FromRole="SetMec" ToRole="Mec" />
+        </EntityType>
+        <EntityType Name="SetPar">
+          <Key>
+            <PropertyRef Name="IdSetPar" />
+          </Key>
+          <Property Name="RedniBroj" Type="Int32" Nullable="false" />
+          <Property Name="RezD" Type="Int32" Nullable="false" />
+          <Property Name="RezG" Type="Int32" Nullable="false" />
+          <Property Name="IdSetPar" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPar" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Par" Relationship="Self.FK_setpar_par" FromRole="SetPar" ToRole="Par" />
+        </EntityType>
+        <EntityType Name="Sezona">
+          <Key>
+            <PropertyRef Name="SifraSezona" />
+          </Key>
+          <Property Name="SifraSezona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Godina" Type="String" MaxLength="9" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Liga" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Utakmicas" Relationship="Self.FK_utakmica_sezona" FromRole="Sezona" ToRole="Utakmica" />
+        </EntityType>
+        <EntityType Name="Utakmica">
+          <Key>
+            <PropertyRef Name="IdUtakmica" />
+          </Key>
+          <Property Name="IdUtakmica" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SifraSezona" Type="Int32" Nullable="false" />
+          <Property Name="IdDomacin" Type="Int32" Nullable="false" />
+          <Property Name="IdGost" Type="Int32" Nullable="false" />
+          <Property Name="Kolo" Type="Int32" Nullable="false" />
+          <Property Name="RezDomacin" Type="Int32" />
+          <Property Name="RezGost" Type="Int32" />
+          <Property Name="BrSetDomacin" Type="Int32" />
+          <Property Name="BrSetGost" Type="Int32" />
+          <Property Name="Liga" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Zakljucano" Type="Int32" />
+          <Property Name="Korisnik" Type="Int32" />
+          <Property Name="Akcija" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Mecs" Relationship="Self.FK_mec_utakmica" FromRole="Utakmica" ToRole="Mec" />
+          <NavigationProperty Name="Momcad" Relationship="Self.FK_utakmica_momcad" FromRole="Utakmica" ToRole="Momcad" />
+          <NavigationProperty Name="Momcad1" Relationship="Self.FK_utakmica_momcad1" FromRole="Utakmica" ToRole="Momcad" />
+          <NavigationProperty Name="Pars" Relationship="Self.FK_par_utakmica" FromRole="Utakmica" ToRole="Par" />
+          <NavigationProperty Name="Sezona" Relationship="Self.FK_utakmica_sezona" FromRole="Utakmica" ToRole="Sezona" />
+        </EntityType>
+        <Association Name="FK_igraza_igrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="IgraZza" Type="Self.IgraZza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="IgraZza">
+              <PropertyRef Name="IdIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_domaciigrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdDomaciIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_gostujuciigrac">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdGostujuciIgrac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_momcad_voditelj">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Momcad">
+              <PropertyRef Name="IdVoditelj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_domacin1">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdDomacin1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_domacin2">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdDomacin2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_gost1">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdGost1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_gost2">
+          <End Role="Igrac" Type="Self.Igrac" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Igrac">
+              <PropertyRef Name="IdIgrac" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdGost2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_igraza_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="IgraZza" Type="Self.IgraZza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="IgraZza">
+              <PropertyRef Name="IdMomcad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mec_utakmica">
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="1" />
+          <End Role="Mec" Type="Self.Mec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utakmica">
+              <PropertyRef Name="IdUtakmica" />
+            </Principal>
+            <Dependent Role="Mec">
+              <PropertyRef Name="IdUtakmica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_set_mec">
+          <End Role="Mec" Type="Self.Mec" Multiplicity="1" />
+          <End Role="SetMec" Type="Self.SetMec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mec">
+              <PropertyRef Name="IdMec" />
+            </Principal>
+            <Dependent Role="SetMec">
+              <PropertyRef Name="IdMec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_natjece_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Natjece" Type="Self.Natjece" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Natjece">
+              <PropertyRef Name="IdMomcad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_momcad">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="IdDomacin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_momcad1">
+          <End Role="Momcad" Type="Self.Momcad" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Momcad">
+              <PropertyRef Name="IdMomcad" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="IdGost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_par_utakmica">
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="1" />
+          <End Role="Par" Type="Self.Par" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utakmica">
+              <PropertyRef Name="IdUtakmica" />
+            </Principal>
+            <Dependent Role="Par">
+              <PropertyRef Name="IdUtakmica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_setpar_par">
+          <End Role="Par" Type="Self.Par" Multiplicity="1" />
+          <End Role="SetPar" Type="Self.SetPar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Par">
+              <PropertyRef Name="IdPar" />
+            </Principal>
+            <Dependent Role="SetPar">
+              <PropertyRef Name="IdPar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_utakmica_sezona">
+          <End Role="Sezona" Type="Self.Sezona" Multiplicity="1" />
+          <End Role="Utakmica" Type="Self.Utakmica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sezona">
+              <PropertyRef Name="SifraSezona" />
+            </Principal>
+            <Dependent Role="Utakmica">
+              <PropertyRef Name="SifraSezona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StkStubakiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Igracs" EntityType="Self.Igrac" />
+          <EntitySet Name="IgraZzas" EntityType="Self.IgraZza" />
+          <EntitySet Name="Korisnicis" EntityType="Self.Korisnici" />
+          <EntitySet Name="Mecs" EntityType="Self.Mec" />
+          <EntitySet Name="Momcads" EntityType="Self.Momcad" />
+          <EntitySet Name="Natjeces" EntityType="Self.Natjece" />
+          <EntitySet Name="Pars" EntityType="Self.Par" />
+          <EntitySet Name="SetMecs" EntityType="Self.SetMec" />
+          <EntitySet Name="SetPars" EntityType="Self.SetPar" />
+          <EntitySet Name="Sezonas" EntityType="Self.Sezona" />
+          <EntitySet Name="Utakmicas" EntityType="Self.Utakmica" />
+          <AssociationSet Name="FK_igraza_igrac" Association="Self.FK_igraza_igrac">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="IgraZza" EntitySet="IgraZzas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_domaciigrac" Association="Self.FK_mec_domaciigrac">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Mec" EntitySet="Mecs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_gostujuciigrac" Association="Self.FK_mec_gostujuciigrac">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Mec" EntitySet="Mecs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_momcad_voditelj" Association="Self.FK_momcad_voditelj">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Momcad" EntitySet="Momcads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_domacin1" Association="Self.FK_par_domacin1">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Par" EntitySet="Pars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_domacin2" Association="Self.FK_par_domacin2">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Par" EntitySet="Pars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_gost1" Association="Self.FK_par_gost1">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Par" EntitySet="Pars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_gost2" Association="Self.FK_par_gost2">
+            <End Role="Igrac" EntitySet="Igracs" />
+            <End Role="Par" EntitySet="Pars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_igraza_momcad" Association="Self.FK_igraza_momcad">
+            <End Role="Momcad" EntitySet="Momcads" />
+            <End Role="IgraZza" EntitySet="IgraZzas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mec_utakmica" Association="Self.FK_mec_utakmica">
+            <End Role="Utakmica" EntitySet="Utakmicas" />
+            <End Role="Mec" EntitySet="Mecs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_set_mec" Association="Self.FK_set_mec">
+            <End Role="Mec" EntitySet="Mecs" />
+            <End Role="SetMec" EntitySet="SetMecs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_natjece_momcad" Association="Self.FK_natjece_momcad">
+            <End Role="Momcad" EntitySet="Momcads" />
+            <End Role="Natjece" EntitySet="Natjeces" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_momcad" Association="Self.FK_utakmica_momcad">
+            <End Role="Momcad" EntitySet="Momcads" />
+            <End Role="Utakmica" EntitySet="Utakmicas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_momcad1" Association="Self.FK_utakmica_momcad1">
+            <End Role="Momcad" EntitySet="Momcads" />
+            <End Role="Utakmica" EntitySet="Utakmicas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_par_utakmica" Association="Self.FK_par_utakmica">
+            <End Role="Utakmica" EntitySet="Utakmicas" />
+            <End Role="Par" EntitySet="Pars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_setpar_par" Association="Self.FK_setpar_par">
+            <End Role="Par" EntitySet="Pars" />
+            <End Role="SetPar" EntitySet="SetPars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_utakmica_sezona" Association="Self.FK_utakmica_sezona">
+            <End Role="Sezona" EntitySet="Sezonas" />
+            <End Role="Utakmica" EntitySet="Utakmicas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StkStubakiModelStoreContainer" CdmEntityContainer="StkStubakiEntities">
+          <EntitySetMapping Name="Igracs">
+            <EntityTypeMapping TypeName="StkStubakiModel.Igrac">
+              <MappingFragment StoreEntitySet="Igrac">
+                <ScalarProperty Name="IdIgrac" ColumnName="IdIgrac" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="GodRodjenja" ColumnName="GodRodjenja" />
+                <ScalarProperty Name="BrTel" ColumnName="BrTel" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Drvo" ColumnName="Drvo" />
+                <ScalarProperty Name="CrnaStrana" ColumnName="CrnaStrana" />
+                <ScalarProperty Name="CrvenaStrana" ColumnName="CrvenaStrana" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IgraZzas">
+            <EntityTypeMapping TypeName="StkStubakiModel.IgraZza">
+              <MappingFragment StoreEntitySet="IgraZza">
+                <ScalarProperty Name="SifraSezona" ColumnName="SifraSezona" />
+                <ScalarProperty Name="IdIgrac" ColumnName="IdIgrac" />
+                <ScalarProperty Name="IdMomcad" ColumnName="IdMomcad" />
+                <ScalarProperty Name="BrPobjeda" ColumnName="BrPobjeda" />
+                <ScalarProperty Name="BrPoraza" ColumnName="BrPoraza" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Korisnicis">
+            <EntityTypeMapping TypeName="StkStubakiModel.Korisnici">
+              <MappingFragment StoreEntitySet="Korisnici">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Ovlasti" ColumnName="Ovlasti" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mecs">
+            <EntityTypeMapping TypeName="StkStubakiModel.Mec">
+              <MappingFragment StoreEntitySet="Mec">
+                <ScalarProperty Name="IdMec" ColumnName="IdMec" />
+                <ScalarProperty Name="RedniBrMec" ColumnName="RedniBrMec" />
+                <ScalarProperty Name="IdUtakmica" ColumnName="IdUtakmica" />
+                <ScalarProperty Name="IdDomaciIgrac" ColumnName="IdDomaciIgrac" />
+                <ScalarProperty Name="IdGostujuciIgrac" ColumnName="IdGostujuciIgrac" />
+                <ScalarProperty Name="DobSetoviDom" ColumnName="DobSetoviDom" />
+                <ScalarProperty Name="DobSetoviGost" ColumnName="DobSetoviGost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Momcads">
+            <EntityTypeMapping TypeName="StkStubakiModel.Momcad">
+              <MappingFragment StoreEntitySet="Momcad">
+                <ScalarProperty Name="IdMomcad" ColumnName="IdMomcad" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="IdVoditelj" ColumnName="IdVoditelj" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Natjeces">
+            <EntityTypeMapping TypeName="StkStubakiModel.Natjece">
+              <MappingFragment StoreEntitySet="Natjece">
+                <ScalarProperty Name="SifraSezona" ColumnName="SifraSezona" />
+                <ScalarProperty Name="IdMomcad" ColumnName="IdMomcad" />
+                <ScalarProperty Name="BrUtakmica" ColumnName="BrUtakmica" />
+                <ScalarProperty Name="BrPobjeda" ColumnName="BrPobjeda" />
+                <ScalarProperty Name="BrPoraza" ColumnName="BrPoraza" />
+                <ScalarProperty Name="BrNerijesenih" ColumnName="BrNerijesenih" />
+                <ScalarProperty Name="DobiveniMecevi" ColumnName="DobiveniMecevi" />
+                <ScalarProperty Name="IzgubljeniMecevi" ColumnName="IzgubljeniMecevi" />
+                <ScalarProperty Name="BrBodova" ColumnName="BrBodova" />
+                <ScalarProperty Name="Kazna" ColumnName="Kazna" />
+                <ScalarProperty Name="OpisKazne" ColumnName="OpisKazne" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pars">
+            <EntityTypeMapping TypeName="StkStubakiModel.Par">
+              <MappingFragment StoreEntitySet="Par">
+                <ScalarProperty Name="IdPar" ColumnName="IdPar" />
+                <ScalarProperty Name="IdUtakmica" ColumnName="IdUtakmica" />
+                <ScalarProperty Name="IdDomacin1" ColumnName="IdDomacin1" />
+                <ScalarProperty Name="IdDomacin2" ColumnName="IdDomacin2" />
+                <ScalarProperty Name="IdGost1" ColumnName="IdGost1" />
+                <ScalarProperty Name="IdGost2" ColumnName="IdGost2" />
+                <ScalarProperty Name="SetoviDomacin" ColumnName="SetoviDomacin" />
+                <ScalarProperty Name="SetoviGost" ColumnName="SetoviGost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SetMecs">
+            <EntityTypeMapping TypeName="StkStubakiModel.SetMec">
+              <MappingFragment StoreEntitySet="SetMec">
+                <ScalarProperty Name="IdSet" ColumnName="IdSet" />
+                <ScalarProperty Name="RedniBrSet" ColumnName="RedniBrSet" />
+                <ScalarProperty Name="PoenDom" ColumnName="PoenDom" />
+                <ScalarProperty Name="PoenGost" ColumnName="PoenGost" />
+                <ScalarProperty Name="IdMec" ColumnName="IdMec" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SetPars">
+            <EntityTypeMapping TypeName="StkStubakiModel.SetPar">
+              <MappingFragment StoreEntitySet="SetPar">
+                <ScalarProperty Name="RedniBroj" ColumnName="RedniBroj" />
+                <ScalarProperty Name="RezD" ColumnName="RezD" />
+                <ScalarProperty Name="RezG" ColumnName="RezG" />
+                <ScalarProperty Name="IdSetPar" ColumnName="IdSetPar" />
+                <ScalarProperty Name="IdPar" ColumnName="IdPar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sezonas">
+            <EntityTypeMapping TypeName="StkStubakiModel.Sezona">
+              <MappingFragment StoreEntitySet="Sezona">
+                <ScalarProperty Name="SifraSezona" ColumnName="SifraSezona" />
+                <ScalarProperty Name="Godina" ColumnName="Godina" />
+                <ScalarProperty Name="Liga" ColumnName="Liga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Utakmicas">
+            <EntityTypeMapping TypeName="StkStubakiModel.Utakmica">
+              <MappingFragment StoreEntitySet="Utakmica">
+                <ScalarProperty Name="IdUtakmica" ColumnName="IdUtakmica" />
+                <ScalarProperty Name="SifraSezona" ColumnName="SifraSezona" />
+                <ScalarProperty Name="IdDomacin" ColumnName="IdDomacin" />
+                <ScalarProperty Name="IdGost" ColumnName="IdGost" />
+                <ScalarProperty Name="Kolo" ColumnName="Kolo" />
+                <ScalarProperty Name="RezDomacin" ColumnName="RezDomacin" />
+                <ScalarProperty Name="RezGost" ColumnName="RezGost" />
+                <ScalarProperty Name="BrSetDomacin" ColumnName="BrSetDomacin" />
+                <ScalarProperty Name="BrSetGost" ColumnName="BrSetGost" />
+                <ScalarProperty Name="Liga" ColumnName="Liga" />
+                <ScalarProperty Name="Zakljucano" ColumnName="Zakljucano" />
+                <ScalarProperty Name="Korisnik" ColumnName="Korisnik" />
+                <ScalarProperty Name="Akcija" ColumnName="Akcija" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
