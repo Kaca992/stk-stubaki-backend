@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 
-namespace StkStubakiBackend
+namespace StkStubaki.Web
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
