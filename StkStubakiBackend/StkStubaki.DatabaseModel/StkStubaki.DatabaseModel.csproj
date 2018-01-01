@@ -95,6 +95,7 @@
     <Compile Include="Sezona.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="StkStubakiEntitiesExtended.cs" />
     <Compile Include="UserExtendedModel.cs" />
     <Compile Include="Utakmica.cs">
       <DependentUpon>Model1.tt</DependentUpon>

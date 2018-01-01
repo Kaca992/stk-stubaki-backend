@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace StkStubaki.DatabaseModel
 {
-    public partial class Sezona
+    public partial class StkStubakiEntities : DbContext
     {
-        public int Test { get; set; }
+        public void Test()
+        {
+            //a test extension method
+        }
     }
 }

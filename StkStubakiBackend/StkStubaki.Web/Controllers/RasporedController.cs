@@ -22,7 +22,7 @@ namespace StkStubaki.Web.Controllers
         public IHttpActionResult GetSeason(int id)
         {
             using (var db = new StkStubakiEntities())
-            {
+            {               
                 var season = db.Sezonas.FirstOrDefault((s) => s.SifraSezona == id);
 
                 if (season == null)
