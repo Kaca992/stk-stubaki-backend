@@ -11,14 +11,22 @@ namespace StkStubaki.Web.Controllers
 {
     public class RasporedController : ApiController
     {
-        public IEnumerable<Sezona> GetAllSeasons()
+        [HttpGet]
+        public IHttpActionResult GetAllSeasons()
         {
             using(var db = new StkStubakiEntities())
             {
-                return db.Sezonas.AsEnumerable();
+                List<SeasonInfo> seasonInfos = new List<SeasonInfo>();
+                foreach(var season in db.Sezonas.AsEnumerable())
+                {
+                    seasonInfos.Add(new SeasonInfo(season));
+                }
+
+                return Ok(seasonInfos);
             }
         }
 
+        [HttpGet]
         public IHttpActionResult GetSeason(int id)
         {
             using (var db = new StkStubakiEntities())
