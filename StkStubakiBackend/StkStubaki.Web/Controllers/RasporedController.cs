@@ -11,7 +11,7 @@ namespace StkStubaki.Web.Controllers
 {
     public class RasporedController : ApiController
     {
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetAllSeasons()
         {
             using(var db = new StkStubakiEntities())
