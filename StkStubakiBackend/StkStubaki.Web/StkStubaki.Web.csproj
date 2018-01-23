@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\LigaController.cs" />
-    <Compile Include="Controllers\RasporedController.cs" />
+    <Compile Include="Controllers\SeasonController.cs" />
     <Compile Include="DTO\SeasonInfo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

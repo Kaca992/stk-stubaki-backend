@@ -9,15 +9,17 @@ using System.Web.Http;
 
 namespace StkStubaki.Web.Controllers
 {
-    public class RasporedController : ApiController
+    [RoutePrefix("api/seasons")]
+    public class SeasonController : ApiController
     {
+        [Route("")]
         [HttpPost]
         public IHttpActionResult GetAllSeasons()
         {
             using(var db = new StkStubakiEntities())
             {
                 List<SeasonInfo> seasonInfos = new List<SeasonInfo>();
-                foreach(var season in db.Sezonas.AsEnumerable())
+                foreach(var season in db.Sezonas.OrderByDescending(x => x.Godina).AsEnumerable())
                 {
                     seasonInfos.Add(new SeasonInfo(season));
                 }
@@ -26,6 +28,7 @@ namespace StkStubaki.Web.Controllers
             }
         }
 
+        [Route("{id:int}")]
         [HttpGet]
         public IHttpActionResult GetSeason(int id)
         {
