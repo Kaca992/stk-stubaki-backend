@@ -1,11 +1,7 @@
 ﻿using StkStubaki.Common.Enums;
 using StkStubaki.DatabaseModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace StkStubaki.Web.DTO
+namespace StkStubaki.Business.DTO
 {
     public class SeasonInfo
     {
