@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace StkStubaki.Web.Controllers
@@ -15,10 +16,12 @@ namespace StkStubaki.Web.Controllers
     {
         [Route("{id:int}/teams")]
         [HttpGet]
-        public IHttpActionResult GetTeamInfos(int id)
+        public async Task<IHttpActionResult> GetTeamInfos(int id)
         {
             var competitionService = new CompetitionService();
-            return Ok(new { teams = competitionService.GetTeamInfos(id) });
+            var teams = await competitionService.GetTeamInfos(id);
+
+            return Ok(new { teams});
         }
     }
 }

@@ -15,7 +15,7 @@ namespace StkStubaki.Business.Services
 
         }
 
-        public List<TableTeamInfoDTO> GetTeamInfos(int competitionId)
+        public Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
@@ -36,7 +36,7 @@ namespace StkStubaki.Business.Services
                         PenaltyDesc = x.OpisKazne
                     }).OrderBy(x => x.Points).ToList();
 
-               return teamInfos;
+               return Task.FromResult(teamInfos);
             }
         }
     }

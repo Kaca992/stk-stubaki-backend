@@ -1,10 +1,12 @@
 ﻿using StkStubaki.Business.DTO;
+using StkStubaki.Business.Services;
 using StkStubaki.DatabaseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace StkStubaki.Web.Controllers
@@ -14,34 +16,22 @@ namespace StkStubaki.Web.Controllers
     {
         [Route("")]
         [HttpGet]
-        public IHttpActionResult GetAllSeasons()
+        public async Task<IHttpActionResult> GetAllSeasons()
         {
-            using(var db = new StkStubakiEntities())
-            {
-                List<SeasonInfo> seasonInfos = new List<SeasonInfo>();
-                foreach(var season in db.Sezonas.OrderByDescending(x => x.Godina).AsEnumerable())
-                {
-                    seasonInfos.Add(new SeasonInfo(season));
-                }
+            var seasonService = new SeasonService();
+            var seasonInfos = await seasonService.GetAllSeasons();
 
-                return Ok(seasonInfos);
-            }
+            return Ok(seasonInfos);
         }
 
         [Route("{id:int}")]
         [HttpGet]
-        public IHttpActionResult GetSeason(int id)
+        public async Task<IHttpActionResult> GetSeason(int id)
         {
-            using (var db = new StkStubakiEntities())
-            {               
-                var season = db.Sezonas.FirstOrDefault((s) => s.SifraSezona == id);
+            var seasonService = new SeasonService();
+            var season = await seasonService.GetSeason(id);
 
-                if (season == null)
-                {
-                    return NotFound();
-                }
-                return Ok(new SeasonInfo(season));
-            }           
+            return Ok(season);
         }
     }
 }
