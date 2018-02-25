@@ -15,7 +15,7 @@ namespace StkStubaki.Business.Services
 
         }
 
-        public List<TableTeamInfoDTO> GetCompetition(int competitionId)
+        public List<TableTeamInfoDTO> GetTeamInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {

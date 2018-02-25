@@ -13,12 +13,12 @@ namespace StkStubaki.Web.Controllers
     [RoutePrefix("api/competition")]
     public class CompetitionController : ApiController
     {
-        [Route("{id:int}")]
+        [Route("{id:int}/teams")]
         [HttpGet]
-        public IHttpActionResult GetCompetition(int id)
+        public IHttpActionResult GetTeamInfos(int id)
         {
             var competitionService = new CompetitionService();
-            return Ok(competitionService.GetCompetition(id));
+            return Ok(new { teams = competitionService.GetTeamInfos(id) });
         }
     }
 }
