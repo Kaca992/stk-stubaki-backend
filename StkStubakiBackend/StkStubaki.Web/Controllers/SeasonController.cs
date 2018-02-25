@@ -13,7 +13,7 @@ namespace StkStubaki.Web.Controllers
     public class SeasonController : ApiController
     {
         [Route("")]
-        [HttpPost]
+        [HttpGet]
         public IHttpActionResult GetAllSeasons()
         {
             using(var db = new StkStubakiEntities())
