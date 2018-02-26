@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BO\PlayerCompetitionInfo.cs" />
+    <Compile Include="BO\TeamCompetitionInfo.cs" />
     <Compile Include="DTO\SeasonInfo.cs" />
     <Compile Include="DTO\TablePlayerInfoDTO.cs" />
     <Compile Include="DTO\TableTeamInfoDTO.cs" />
@@ -68,8 +70,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
