@@ -19,9 +19,12 @@ namespace StkStubaki.Web.Controllers
         public async Task<IHttpActionResult> GetTeamInfos(int id)
         {
             var competitionService = new CompetitionService();
-            var teams = await competitionService.GetTeamInfos(id);
+            var teams = competitionService.GetTeamInfos(id);
+            var players = competitionService.GetPlayerInfos(id);
 
-            return Ok(new { teams});
+            await Task.WhenAll(teams, players);
+
+            return Ok(new { teams = teams.Result, players = players.Result });
         }
     }
 }
