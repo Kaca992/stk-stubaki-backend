@@ -22,6 +22,28 @@ namespace StkStubaki.Business.Services
 
         }
 
+        #region Data Fetchers
+        public Task LoadCompetitionData(int competitionId)
+        {
+            using (var db = new StkStubakiEntities())
+            {
+                var allPlayedGames = db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
+                    .Include(x => x.Mecs.Select(m => m.SetMecs))
+                    .Include(x => x.Pars.Select(p => p.SetPars))
+                    .ToList();
+
+                return Task.Run(() => {
+                    foreach (var game in allPlayedGames)
+                    {
+                        insertTeamInfo(game);
+                        populateHeadToHead(game);
+
+                        // TODO populate player infos
+                    }
+                });
+            }
+        }
+
         public Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
@@ -41,12 +63,11 @@ namespace StkStubaki.Business.Services
                         Points = x.BrBodova ?? 0,
                         NegativePoints = x.Kazna ?? 0,
                         PenaltyDesc = x.OpisKazne
-                    }).OrderByDescending(x => x.Points).ToList();
+                    }).ToList();
 
                return Task.FromResult(teamInfos);
             }
         }
-
         public Task<List<TablePlayerInfoDTO>> GetPlayerInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
@@ -60,29 +81,89 @@ namespace StkStubaki.Business.Services
                         TeamName = x.Momcad.Naziv,
                         Won = x.BrPobjeda ?? 0,
                         Lost = x.BrPoraza ?? 0
-                    }).OrderByDescending(x => x.Won).ThenBy(x => x.Lost).ToList();
+                    }).ToList();
 
                 return Task.FromResult(teamInfos);
             }
         }
+        #endregion
 
-        public void GetWinRatio(int competitionId)
+        #region Sortings
+        public Task SortTeams()
         {
-            using (var db = new StkStubakiEntities())
-            {
-                var allPlayedGames = db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
-                    .Include(x => x.Mecs.Select(m => m.SetMecs))
-                    .Include(x => x.Pars.Select(p => p.SetPars))
-                    .ToList();
+            return Task.Run(() => {
+                var teams = TeamCompetitionInfos.Values.ToList();
+                var sortedTeamIds = new List<int>();
+                teams.Sort();
+                teams.Reverse();
 
-                foreach(var game in allPlayedGames)
+                int lastPoints = -1;
+                var teamsWithSamePoints = new List<TeamCompetitionInfo>();
+                foreach(var team in teams)
                 {
-                    insertTeamInfo(game);
-                    populateHeadToHead(game);
+                    if (team.Points != lastPoints)
+                    {
+                        sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+                        teamsWithSamePoints.Clear();
+
+                        lastPoints = team.Points;
+                        teamsWithSamePoints.Add(team);
+                    }
+                    else
+                    {
+                        teamsWithSamePoints.Add(team);
+                    }
                 }
-            }
+
+                sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+            });
         }
 
+        private List<int> sortTeamsWithSamePoints(List<TeamCompetitionInfo> teamsWithSamePoints)
+        {
+            if (teamsWithSamePoints.Count == 1)
+            {
+                return new List<int>() { teamsWithSamePoints.FirstOrDefault().TeamId };
+            }
+
+            Dictionary<int, TeamCompetitionInfo> headToHeadInfo = new Dictionary<int, TeamCompetitionInfo>();
+            foreach(var team in teamsWithSamePoints)
+            {
+                headToHeadInfo.Add(team.TeamId, new TeamCompetitionInfo(team.TeamId));
+            }
+
+            // if none than we just return as was sorted in start
+            bool hasHeadToHead = false;
+            for (int i = 0; i < teamsWithSamePoints.Count - 1; i++)
+            {
+                for (int j = i + 1; j < teamsWithSamePoints.Count; j++)
+                {
+                    var headToHeadKey = new HeadToHeadKey(teamsWithSamePoints[i].TeamId, teamsWithSamePoints[j].TeamId);
+                    if (TeamHeadToHeadInfos.ContainsKey(headToHeadKey))
+                    {
+                        hasHeadToHead = true;
+                        var headToHead = TeamHeadToHeadInfos[headToHeadKey];
+                        headToHeadInfo[headToHead.Team1.TeamId].Aggregate(headToHead.Team1);
+                        headToHeadInfo[headToHead.Team2.TeamId].Aggregate(headToHead.Team2);
+                    }
+                }
+            }
+
+            if (!hasHeadToHead)
+            {
+                return teamsWithSamePoints.Select(x => x.TeamId).ToList();
+            }
+
+            var headToHeadTeamList = headToHeadInfo.Values.ToList();
+            headToHeadTeamList.Sort();
+            headToHeadTeamList.Reverse();
+
+            return headToHeadTeamList.Select(x => x.TeamId).ToList();
+        }
+
+        #endregion
+
+        #region Helpers
         private void insertTeamInfo(Utakmica game)
         {
             if (!TeamCompetitionInfos.ContainsKey(game.IdDomacin))
@@ -97,7 +178,6 @@ namespace StkStubaki.Business.Services
 
             populateTeamCompetitionInfo(TeamCompetitionInfos[game.IdDomacin], TeamCompetitionInfos[game.IdGost], game);
         }
-
         private void populateHeadToHead(Utakmica game)
         {
             HeadToHeadKey key = new HeadToHeadKey(game.IdDomacin, game.IdGost);
@@ -108,7 +188,6 @@ namespace StkStubaki.Business.Services
 
             populateTeamCompetitionInfo(TeamHeadToHeadInfos[key].Team1, TeamHeadToHeadInfos[key].Team2, game);
         }
-
         private void populateTeamCompetitionInfo(TeamCompetitionInfo info1, TeamCompetitionInfo info2, Utakmica game)
         {
             var infoDomacin = info1.TeamId == game.IdDomacin ? info1 : info2;
@@ -147,7 +226,7 @@ namespace StkStubaki.Business.Services
                 }
             }
         }
-
+        #endregion
         public class HeadToHeadKey
         {
             public int Id1 { get; set; }
@@ -178,7 +257,6 @@ namespace StkStubaki.Business.Services
                 }
             }
         }
-
         public class HeadToHeadTeamInfo
         {
             public TeamCompetitionInfo Team1 { get; set; }

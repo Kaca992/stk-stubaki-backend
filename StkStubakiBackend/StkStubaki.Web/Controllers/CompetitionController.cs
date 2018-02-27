@@ -21,14 +21,19 @@ namespace StkStubaki.Web.Controllers
             var competitionService = new CompetitionService();
             var teams = competitionService.GetTeamInfos(id);
             var players = competitionService.GetPlayerInfos(id);
-            competitionService.GetWinRatio(id);
+            var winRatios = competitionService.LoadCompetitionData(id);
+
+            // 2 Liga, sezona 2014/2015
 
             // TODO sortirati prema head to head + onim info detaljnim, ulaz su ovi gore teams
             // TODO teamsHeadToHead Dict<int, {int, int=>-1,0,1}>
             // TODO isto za igrace
             // TODO Izvuci info za parove
 
-            await Task.WhenAll(teams, players);
+            // HeadToHead klasa => Id, Dict<ProtivnikId, {-1, 0 , 1}>
+
+            await Task.WhenAll(teams, players, winRatios);
+            await Task.WhenAll(competitionService.SortTeams());
 
             return Ok(new { teams = teams.Result, players = players.Result });
         }
