@@ -32,6 +32,13 @@ namespace StkStubaki.Web.Controllers
 
             // HeadToHead klasa => Id, Dict<ProtivnikId, {-1, 0 , 1}>
 
+            // REFACTOR:
+            //  1. Izdvojiti sorter u posebnu klasu da se lako moze zamijeniti
+            //  2. Dohvat i popunjavanje info-a i head to head
+            //  3. Sortiranje momcadi i mapiranje u DTO
+            //  4. Sortiranje igraca i mapiranje u DTO
+            //  5. HeadToHead mapiranje u DTO
+
             await Task.WhenAll(teams, players, winRatios);
             await Task.WhenAll(competitionService.SortTeams());
 
