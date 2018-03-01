@@ -21,14 +21,14 @@ namespace StkStubaki.Web.Controllers
             var competitionService = new CompetitionService();
             var teams = competitionService.GetTeamInfos(id);
             var players = competitionService.GetPlayerInfos(id);
-            competitionService.GetWinRatio(id);
+            var dataLoad = competitionService.GetWinRatio(id);
 
             // TODO sortirati prema head to head + onim info detaljnim, ulaz su ovi gore teams
             // TODO teamsHeadToHead Dict<int, {int, int=>-1,0,1}>
             // TODO isto za igrace
             // TODO Izvuci info za parove
 
-            await Task.WhenAll(teams, players);
+            await Task.WhenAll(teams, players, dataLoad);
 
             return Ok(new { teams = teams.Result, players = players.Result });
         }

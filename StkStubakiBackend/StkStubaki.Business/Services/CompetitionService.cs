@@ -22,11 +22,11 @@ namespace StkStubaki.Business.Services
 
         }
 
-        public Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
+        public async Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var teamInfos = db.Natjeces.Include("Momcad")
+                var teamInfos = await db.Natjeces.Include("Momcad")
                     .Where(x => x.SifraSezona == competitionId)
                     .Select(x => new TableTeamInfoDTO()
                     {
@@ -41,17 +41,17 @@ namespace StkStubaki.Business.Services
                         Points = x.BrBodova ?? 0,
                         NegativePoints = x.Kazna ?? 0,
                         PenaltyDesc = x.OpisKazne
-                    }).OrderByDescending(x => x.Points).ToList();
+                    }).OrderByDescending(x => x.Points).ToListAsync();
 
-               return Task.FromResult(teamInfos);
+               return teamInfos;
             }
         }
 
-        public Task<List<TablePlayerInfoDTO>> GetPlayerInfos(int competitionId)
+        public async Task<List<TablePlayerInfoDTO>> GetPlayerInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var teamInfos = db.IgraZzas.Include(x => x.Momcad).Include(x => x.Igrac)
+                var playerInfos =  await db.IgraZzas.Include(x => x.Momcad).Include(x => x.Igrac)
                     .Where(x => x.SifraSezona == competitionId && (x.BrPobjeda > 0 || x.BrPoraza > 0))
                     .Select(x => new TablePlayerInfoDTO()
                     {
@@ -60,22 +60,22 @@ namespace StkStubaki.Business.Services
                         TeamName = x.Momcad.Naziv,
                         Won = x.BrPobjeda ?? 0,
                         Lost = x.BrPoraza ?? 0
-                    }).OrderByDescending(x => x.Won).ThenBy(x => x.Lost).ToList();
+                    }).OrderByDescending(x => x.Won).ThenBy(x => x.Lost).ToListAsync();
 
-                return Task.FromResult(teamInfos);
+                return playerInfos;
             }
         }
 
-        public void GetWinRatio(int competitionId)
+        public async Task GetWinRatio(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var allPlayedGames = db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
+                var allPlayedGames = await db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
                     .Include(x => x.Mecs.Select(m => m.SetMecs))
                     .Include(x => x.Pars.Select(p => p.SetPars))
-                    .ToList();
+                    .ToListAsync();
 
-                foreach(var game in allPlayedGames)
+                foreach (var game in allPlayedGames)
                 {
                     insertTeamInfo(game);
                     populateHeadToHead(game);
