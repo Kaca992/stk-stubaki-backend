@@ -23,32 +23,30 @@ namespace StkStubaki.Business.Services
         }
 
         #region Data Fetchers
-        public Task LoadCompetitionData(int competitionId)
+        public async Task LoadCompetitionData(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var allPlayedGames = db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
+                var allPlayedGames = await db.Utakmicas.Where(x => x.SifraSezona == competitionId && (x.RezDomacin != 0 || x.RezGost != 0))
                     .Include(x => x.Mecs.Select(m => m.SetMecs))
                     .Include(x => x.Pars.Select(p => p.SetPars))
-                    .ToList();
+                    .ToListAsync();
 
-                return Task.Run(() => {
-                    foreach (var game in allPlayedGames)
-                    {
-                        insertTeamInfo(game);
-                        populateHeadToHead(game);
+                foreach (var game in allPlayedGames)
+                {
+                    insertTeamInfo(game);
+                    populateHeadToHead(game);
 
-                        // TODO populate player infos
-                    }
-                });
+                    // TODO populate player infos
+                }
             }
         }
 
-        public Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
+        public async Task<List<TableTeamInfoDTO>> GetTeamInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var teamInfos = db.Natjeces.Include("Momcad")
+                var teamInfos = await db.Natjeces.Include("Momcad")
                     .Where(x => x.SifraSezona == competitionId)
                     .Select(x => new TableTeamInfoDTO()
                     {
@@ -63,16 +61,16 @@ namespace StkStubaki.Business.Services
                         Points = x.BrBodova ?? 0,
                         NegativePoints = x.Kazna ?? 0,
                         PenaltyDesc = x.OpisKazne
-                    }).ToList();
+                    }).ToListAsync();
 
-               return Task.FromResult(teamInfos);
+               return teamInfos;
             }
         }
-        public Task<List<TablePlayerInfoDTO>> GetPlayerInfos(int competitionId)
+        public async Task<List<TablePlayerInfoDTO>> GetPlayerInfos(int competitionId)
         {
             using (var db = new StkStubakiEntities())
             {
-                var teamInfos = db.IgraZzas.Include(x => x.Momcad).Include(x => x.Igrac)
+                var playerInfos = await db.IgraZzas.Include(x => x.Momcad).Include(x => x.Igrac)
                     .Where(x => x.SifraSezona == competitionId && (x.BrPobjeda > 0 || x.BrPoraza > 0))
                     .Select(x => new TablePlayerInfoDTO()
                     {
@@ -81,42 +79,40 @@ namespace StkStubaki.Business.Services
                         TeamName = x.Momcad.Naziv,
                         Won = x.BrPobjeda ?? 0,
                         Lost = x.BrPoraza ?? 0
-                    }).ToList();
+                    }).ToListAsync();
 
-                return Task.FromResult(teamInfos);
+                return playerInfos;
             }
         }
         #endregion
 
         #region Sortings
-        public Task SortTeams()
+        public void SortTeams()
         {
-            return Task.Run(() => {
-                var teams = TeamCompetitionInfos.Values.ToList();
-                var sortedTeamIds = new List<int>();
-                teams.Sort();
-                teams.Reverse();
+            var teams = TeamCompetitionInfos.Values.ToList();
+            var sortedTeamIds = new List<int>();
+            teams.Sort();
+            teams.Reverse();
 
-                int lastPoints = -1;
-                var teamsWithSamePoints = new List<TeamCompetitionInfo>();
-                foreach(var team in teams)
+            int lastPoints = -1;
+            var teamsWithSamePoints = new List<TeamCompetitionInfo>();
+            foreach (var team in teams)
+            {
+                if (team.Points != lastPoints)
                 {
-                    if (team.Points != lastPoints)
-                    {
-                        sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
-                        teamsWithSamePoints.Clear();
+                    sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+                    teamsWithSamePoints.Clear();
 
-                        lastPoints = team.Points;
-                        teamsWithSamePoints.Add(team);
-                    }
-                    else
-                    {
-                        teamsWithSamePoints.Add(team);
-                    }
+                    lastPoints = team.Points;
+                    teamsWithSamePoints.Add(team);
                 }
+                else
+                {
+                    teamsWithSamePoints.Add(team);
+                }
+            }
 
-                sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
-            });
+            sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
         }
 
         private List<int> sortTeamsWithSamePoints(List<TeamCompetitionInfo> teamsWithSamePoints)

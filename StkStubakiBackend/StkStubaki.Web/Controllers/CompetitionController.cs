@@ -40,7 +40,7 @@ namespace StkStubaki.Web.Controllers
             //  5. HeadToHead mapiranje u DTO
 
             await Task.WhenAll(teams, players, winRatios);
-            await Task.WhenAll(competitionService.SortTeams());
+            await Task.Run(() => { competitionService.SortTeams(); });
 
             return Ok(new { teams = teams.Result, players = players.Result });
         }
