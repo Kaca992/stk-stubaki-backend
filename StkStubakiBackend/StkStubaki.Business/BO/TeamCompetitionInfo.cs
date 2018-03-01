@@ -27,8 +27,63 @@ namespace StkStubaki.Business.BO
             if (obj == null) return 1;
 
             TeamCompetitionInfo otherInfo = obj as TeamCompetitionInfo;
-            
+            var order = compareValues(Points, otherInfo.Points);
+            if (order != 0)
+            {
+                return order;
+            }
 
+            order = compareValues(MatchesWon, otherInfo.MatchesWon);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            order = -1 * compareValues(MatchesLost, otherInfo.MatchesLost);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            order = compareValues(SetsWon, otherInfo.SetsWon);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            order = -1 * compareValues(SetsLost, otherInfo.SetsLost);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            order = compareValues(PointsWon, otherInfo.PointsWon);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            order = -1 * compareValues(PointsLost, otherInfo.PointsLost);
+            if (order != 0)
+            {
+                return order;
+            }
+
+            return 0;
+        }
+
+        private int compareValues(int value1, int value2)
+        {
+            if (value1 > value2)
+            {
+                return 1;
+            }
+            else if (value1 < value2)
+            {
+                return -1;
+            }
+
+            return 0;
         }
 
         public void Aggregate(TeamCompetitionInfo info)
