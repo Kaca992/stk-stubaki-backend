@@ -87,32 +87,42 @@ namespace StkStubaki.Business.Services
         #endregion
 
         #region Sortings
-        public void SortTeams()
+        public Task<List<TableTeamInfoDTO>> SortTeams(List<TableTeamInfoDTO> teamInfosDTO)
         {
-            var teams = TeamCompetitionInfos.Values.ToList();
-            var sortedTeamIds = new List<int>();
-            teams.Sort();
-            teams.Reverse();
+            return Task.Run(() => {
+                var teams = TeamCompetitionInfos.Values.ToList();
+                var sortedTeamIds = new List<int>();
+                teams.Sort();
+                teams.Reverse();
 
-            int lastPoints = -1;
-            var teamsWithSamePoints = new List<TeamCompetitionInfo>();
-            foreach (var team in teams)
-            {
-                if (team.Points != lastPoints)
+                int lastPoints = -1;
+                var teamsWithSamePoints = new List<TeamCompetitionInfo>();
+                foreach (var team in teams)
                 {
-                    sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
-                    teamsWithSamePoints.Clear();
+                    if (team.Points != lastPoints)
+                    {
+                        sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+                        teamsWithSamePoints.Clear();
 
-                    lastPoints = team.Points;
-                    teamsWithSamePoints.Add(team);
+                        lastPoints = team.Points;
+                        teamsWithSamePoints.Add(team);
+                    }
+                    else
+                    {
+                        teamsWithSamePoints.Add(team);
+                    }
                 }
-                else
+
+                sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+
+                var sortedTeamInfosDTO = new List<TableTeamInfoDTO>();
+                foreach (var teamId in sortedTeamIds)
                 {
-                    teamsWithSamePoints.Add(team);
+                    sortedTeamInfosDTO.Add(teamInfosDTO.First(x => x.TeamId == teamId));
                 }
-            }
 
-            sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+                return sortedTeamInfosDTO;
+            });
         }
 
         private List<int> sortTeamsWithSamePoints(List<TeamCompetitionInfo> teamsWithSamePoints)

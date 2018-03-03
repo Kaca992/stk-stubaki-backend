@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StkStubaki.Business.BO
 {
-    public class HeadToHeadInfo<T>
+    public class HeadToHeadInfo<T> where T: IComparable
     {
         public T Info1 { get; set; }
         public T Info2 { get; set; }

@@ -1,5 +1,6 @@
 ﻿using StkStubaki.Business.DTO;
 using StkStubaki.Business.Services;
+using StkStubaki.Business.Utils;
 using StkStubaki.DatabaseModel;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,13 @@ namespace StkStubaki.Web.Controllers
             //  5. HeadToHead mapiranje u DTO
 
             await Task.WhenAll(teams, players, winRatios);
-            await Task.Run(() => { competitionService.SortTeams(); });
 
-            return Ok(new { teams = teams.Result, players = players.Result });
+            var sortedTeams = competitionService.SortTeams(teams.Result);
+            await Task.WhenAll(sortedTeams);
+
+            var teamHeadToHeads = HeadToHeadHelper.GenerateHeadToHeadInfoDTO(competitionService.TeamHeadToHeadInfos);
+
+            return Ok(new { teams = sortedTeams.Result, players = players.Result, teamHeadToHeads = teamHeadToHeads });
         }
     }
 }

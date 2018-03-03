@@ -50,12 +50,14 @@
     <Compile Include="BO\HeadToHeadInfo.cs" />
     <Compile Include="BO\PlayerCompetitionInfo.cs" />
     <Compile Include="BO\TeamCompetitionInfo.cs" />
+    <Compile Include="DTO\HeadToHeadInfoDTO.cs" />
     <Compile Include="DTO\SeasonInfo.cs" />
     <Compile Include="DTO\TablePlayerInfoDTO.cs" />
     <Compile Include="DTO\TableTeamInfoDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\SeasonService.cs" />
+    <Compile Include="Utils\HeadToHeadHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StkStubaki.Common\StkStubaki.Common.csproj">
