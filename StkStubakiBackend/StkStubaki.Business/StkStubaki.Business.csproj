@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BO\HeadToHeadInfo.cs" />
     <Compile Include="BO\PlayerCompetitionInfo.cs" />
     <Compile Include="BO\TeamCompetitionInfo.cs" />
     <Compile Include="DTO\SeasonInfo.cs" />

@@ -15,7 +15,7 @@ namespace StkStubaki.Business.Services
         public readonly Dictionary<int, TeamCompetitionInfo> TeamCompetitionInfos = new Dictionary<int, TeamCompetitionInfo>();
         public readonly Dictionary<int, PlayerCompetitionInfo> PlayerCompetitionInfos = new Dictionary<int, PlayerCompetitionInfo>();
 
-        public readonly Dictionary<HeadToHeadKey, HeadToHeadTeamInfo> TeamHeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadTeamInfo>();
+        public readonly Dictionary<HeadToHeadKey, HeadToHeadInfo<TeamCompetitionInfo>> TeamHeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<TeamCompetitionInfo>>();
 
         public CompetitionService()
         {
@@ -139,8 +139,8 @@ namespace StkStubaki.Business.Services
                     {
                         hasHeadToHead = true;
                         var headToHead = TeamHeadToHeadInfos[headToHeadKey];
-                        headToHeadInfo[headToHead.Team1.TeamId].Aggregate(headToHead.Team1);
-                        headToHeadInfo[headToHead.Team2.TeamId].Aggregate(headToHead.Team2);
+                        headToHeadInfo[headToHead.Info1.TeamId].Aggregate(headToHead.Info1);
+                        headToHeadInfo[headToHead.Info2.TeamId].Aggregate(headToHead.Info2);
                     }
                 }
             }
@@ -179,10 +179,10 @@ namespace StkStubaki.Business.Services
             HeadToHeadKey key = new HeadToHeadKey(game.IdDomacin, game.IdGost);
             if (!TeamHeadToHeadInfos.ContainsKey(key))
             {
-                TeamHeadToHeadInfos.Add(key, new HeadToHeadTeamInfo(game.IdDomacin, game.IdGost));
+                TeamHeadToHeadInfos.Add(key, new HeadToHeadInfo<TeamCompetitionInfo>(game.IdDomacin, game.IdGost));
             }
 
-            populateTeamCompetitionInfo(TeamHeadToHeadInfos[key].Team1, TeamHeadToHeadInfos[key].Team2, game);
+            populateTeamCompetitionInfo(TeamHeadToHeadInfos[key].Info1, TeamHeadToHeadInfos[key].Info2, game);
         }
         private void populateTeamCompetitionInfo(TeamCompetitionInfo info1, TeamCompetitionInfo info2, Utakmica game)
         {
@@ -223,49 +223,5 @@ namespace StkStubaki.Business.Services
             }
         }
         #endregion
-        public class HeadToHeadKey
-        {
-            public int Id1 { get; set; }
-            public int Id2 { get; set; }
-
-            public HeadToHeadKey(int teamId1, int teamId2)
-            {
-                Id1 = teamId1 > teamId2 ? teamId1 : teamId2;
-                Id2 = teamId1 > teamId2 ? teamId2 : teamId1;
-            }
-
-            public override bool Equals(object obj)
-            {
-                HeadToHeadKey h2 = obj as HeadToHeadKey;
-                if (h2 == null)
-                    return false;
-                return Id1 == h2.Id1 && Id2 == h2.Id2;
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    int hash = 17;
-                    hash = hash * 23 + Id1.GetHashCode();
-                    hash = hash * 23 + Id2.GetHashCode();
-                    return hash;
-                }
-            }
-        }
-        public class HeadToHeadTeamInfo
-        {
-            public TeamCompetitionInfo Team1 { get; set; }
-            public TeamCompetitionInfo Team2 { get; set; }
-
-            public HeadToHeadTeamInfo(int teamId1, int teamId2)
-            {
-                var id1 = teamId1 > teamId2 ? teamId1 : teamId2;
-                var id2 = teamId1 > teamId2 ? teamId2 : teamId1;
-
-                Team1 = new TeamCompetitionInfo(id1);
-                Team2 = new TeamCompetitionInfo(id2);
-            }
-        }
     }
 }
