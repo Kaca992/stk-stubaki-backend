@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StkStubaki.Business.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StkStubaki.Business.BO
 {
-    public class TeamCompetitionInfo : IComparable
+    public class TeamCompetitionInfo : ICompetitionData
     {
-        public int TeamId { get; set; }
+        public int ID { get; set; }
         public int Points { get; set; }
         public int MatchesWon { get; set; }
         public int MatchesLost { get; set; }
@@ -17,9 +18,14 @@ namespace StkStubaki.Business.BO
         public int PointsWon { get; set; }
         public int PointsLost { get; set; }
 
+        public TeamCompetitionInfo()
+        {
+            
+        }
+
         public TeamCompetitionInfo(int teamId)
         {
-            TeamId = teamId;
+            ID = teamId;
         }
 
         public int CompareTo(object obj)
@@ -86,8 +92,14 @@ namespace StkStubaki.Business.BO
             return 0;
         }
 
-        public void Aggregate(TeamCompetitionInfo info)
+        public void Aggregate<T>(T data)
         {
+            var info = data as TeamCompetitionInfo;
+            if (info == null)
+            {
+                return;
+            }
+
             Points += info.Points;
             MatchesWon += info.MatchesWon;
             MatchesLost += info.MatchesLost;

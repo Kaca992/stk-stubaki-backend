@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using StkStubaki.Business.BO;
+using StkStubaki.Business.Interfaces;
 
 namespace StkStubaki.Business.Services
 {
@@ -89,31 +90,10 @@ namespace StkStubaki.Business.Services
         #region Sortings
         public Task<List<TableTeamInfoDTO>> SortTeams(List<TableTeamInfoDTO> teamInfosDTO)
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 var teams = TeamCompetitionInfos.Values.ToList();
-                var sortedTeamIds = new List<int>();
-                teams.Sort();
-                teams.Reverse();
-
-                int lastPoints = -1;
-                var teamsWithSamePoints = new List<TeamCompetitionInfo>();
-                foreach (var team in teams)
-                {
-                    if (team.Points != lastPoints)
-                    {
-                        sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
-                        teamsWithSamePoints.Clear();
-
-                        lastPoints = team.Points;
-                        teamsWithSamePoints.Add(team);
-                    }
-                    else
-                    {
-                        teamsWithSamePoints.Add(team);
-                    }
-                }
-
-                sortedTeamIds.AddRange(sortTeamsWithSamePoints(teamsWithSamePoints));
+                List<int> sortedTeamIds = sortCompetitionData(teams, TeamHeadToHeadInfos);
 
                 var sortedTeamInfosDTO = new List<TableTeamInfoDTO>();
                 foreach (var teamId in sortedTeamIds)
@@ -125,46 +105,75 @@ namespace StkStubaki.Business.Services
             });
         }
 
-        private List<int> sortTeamsWithSamePoints(List<TeamCompetitionInfo> teamsWithSamePoints)
+        private List<int> sortCompetitionData<T>(List<T> competitionData, Dictionary<HeadToHeadKey, HeadToHeadInfo<T>> headToHeadInfos) where T: ICompetitionData, new()
         {
-            if (teamsWithSamePoints.Count == 1)
+            var sortedDataIds = new List<int>();
+            competitionData.Sort();
+            competitionData.Reverse();
+
+            int lastPoints = -1;
+            var dataWithSamePoints = new List<T>();
+            foreach (var data in competitionData)
             {
-                return new List<int>() { teamsWithSamePoints.FirstOrDefault().TeamId };
+                if (data.Points != lastPoints)
+                {
+                    sortedDataIds.AddRange(sortDataWithSamePoints(dataWithSamePoints, headToHeadInfos));
+                    dataWithSamePoints.Clear();
+
+                    lastPoints = data.Points;
+                    dataWithSamePoints.Add(data);
+                }
+                else
+                {
+                    dataWithSamePoints.Add(data);
+                }
             }
 
-            Dictionary<int, TeamCompetitionInfo> headToHeadInfo = new Dictionary<int, TeamCompetitionInfo>();
-            foreach(var team in teamsWithSamePoints)
+            sortedDataIds.AddRange(sortDataWithSamePoints(dataWithSamePoints, headToHeadInfos));
+            return sortedDataIds;
+        }
+
+        private List<int> sortDataWithSamePoints<T>(List<T> dataWithSamePoints, Dictionary<HeadToHeadKey, HeadToHeadInfo<T>> headToHeadInfos) where T : ICompetitionData, new()
+        {
+            if (dataWithSamePoints.Count == 1)
             {
-                headToHeadInfo.Add(team.TeamId, new TeamCompetitionInfo(team.TeamId));
+                return new List<int>() { dataWithSamePoints.FirstOrDefault().ID };
+            }
+
+            Dictionary<int, T> headToHeadInfo = new Dictionary<int, T>();
+            foreach(var data in dataWithSamePoints)
+            {
+                headToHeadInfo.Add(data.ID, new T());
+                headToHeadInfo[data.ID].ID = data.ID;
             }
 
             // if none than we just return as was sorted in start
             bool hasHeadToHead = false;
-            for (int i = 0; i < teamsWithSamePoints.Count - 1; i++)
+            for (int i = 0; i < dataWithSamePoints.Count - 1; i++)
             {
-                for (int j = i + 1; j < teamsWithSamePoints.Count; j++)
+                for (int j = i + 1; j < dataWithSamePoints.Count; j++)
                 {
-                    var headToHeadKey = new HeadToHeadKey(teamsWithSamePoints[i].TeamId, teamsWithSamePoints[j].TeamId);
-                    if (TeamHeadToHeadInfos.ContainsKey(headToHeadKey))
+                    var headToHeadKey = new HeadToHeadKey(dataWithSamePoints[i].ID, dataWithSamePoints[j].ID);
+                    if (headToHeadInfos.ContainsKey(headToHeadKey))
                     {
                         hasHeadToHead = true;
                         var headToHead = TeamHeadToHeadInfos[headToHeadKey];
-                        headToHeadInfo[headToHead.Info1.TeamId].Aggregate(headToHead.Info1);
-                        headToHeadInfo[headToHead.Info2.TeamId].Aggregate(headToHead.Info2);
+                        headToHeadInfo[headToHead.Info1.ID].Aggregate(headToHead.Info1);
+                        headToHeadInfo[headToHead.Info2.ID].Aggregate(headToHead.Info2);
                     }
                 }
             }
 
             if (!hasHeadToHead)
             {
-                return teamsWithSamePoints.Select(x => x.TeamId).ToList();
+                return dataWithSamePoints.Select(x => x.ID).ToList();
             }
 
             var headToHeadTeamList = headToHeadInfo.Values.ToList();
             headToHeadTeamList.Sort();
             headToHeadTeamList.Reverse();
 
-            return headToHeadTeamList.Select(x => x.TeamId).ToList();
+            return headToHeadTeamList.Select(x => x.ID).ToList();
         }
 
         #endregion
@@ -196,8 +205,8 @@ namespace StkStubaki.Business.Services
         }
         private void populateTeamCompetitionInfo(TeamCompetitionInfo info1, TeamCompetitionInfo info2, Utakmica game)
         {
-            var infoDomacin = info1.TeamId == game.IdDomacin ? info1 : info2;
-            var infoGost = info1.TeamId == game.IdDomacin ? info2 : info1;
+            var infoDomacin = info1.ID == game.IdDomacin ? info1 : info2;
+            var infoGost = info1.ID == game.IdDomacin ? info2 : info1;
 
             infoDomacin.MatchesWon += game.RezDomacin ?? 0;
             infoDomacin.MatchesLost += game.RezGost ?? 0;

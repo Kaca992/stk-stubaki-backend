@@ -54,6 +54,8 @@
     <Compile Include="DTO\SeasonInfo.cs" />
     <Compile Include="DTO\TablePlayerInfoDTO.cs" />
     <Compile Include="DTO\TableTeamInfoDTO.cs" />
+    <Compile Include="Interfaces\IAggregatable.cs" />
+    <Compile Include="Interfaces\ICompetitionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\SeasonService.cs" />
