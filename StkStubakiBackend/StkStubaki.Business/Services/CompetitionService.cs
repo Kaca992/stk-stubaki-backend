@@ -17,6 +17,7 @@ namespace StkStubaki.Business.Services
         public readonly Dictionary<int, PlayerCompetitionInfo> PlayerCompetitionInfos = new Dictionary<int, PlayerCompetitionInfo>();
 
         public readonly Dictionary<HeadToHeadKey, HeadToHeadInfo<TeamCompetitionInfo>> TeamHeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<TeamCompetitionInfo>>();
+        public readonly Dictionary<HeadToHeadKey, HeadToHeadInfo<PlayerCompetitionInfo>> PlayerHeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<PlayerCompetitionInfo>>();
 
         public CompetitionService()
         {
@@ -37,8 +38,7 @@ namespace StkStubaki.Business.Services
                 {
                     insertTeamInfo(game);
                     populateHeadToHead(game);
-
-                    // TODO populate player infos
+                    insertPlayerInfo(game);
                 }
             }
         }
@@ -105,6 +105,27 @@ namespace StkStubaki.Business.Services
             });
         }
 
+        public Task<List<TablePlayerInfoDTO>> SortPlayers(List<TablePlayerInfoDTO> playerInfosDTO)
+        {
+            return Task.Run(() =>
+            {
+                var players = PlayerCompetitionInfos.Values.ToList();
+                List<int> sortedPlayerIds = sortCompetitionData(players, PlayerHeadToHeadInfos);
+
+                var sortedPlayerInfosDTO = new List<TablePlayerInfoDTO>();
+                foreach (var playerId in sortedPlayerIds)
+                {
+                    if (playerId == 1)
+                    {
+                        continue;
+                    }
+                    sortedPlayerInfosDTO.Add(playerInfosDTO.First(x => x.PlayerId == playerId));
+                }
+
+                return sortedPlayerInfosDTO;
+            });
+        }
+
         private List<int> sortCompetitionData<T>(List<T> competitionData, Dictionary<HeadToHeadKey, HeadToHeadInfo<T>> headToHeadInfos) where T: ICompetitionData, new()
         {
             var sortedDataIds = new List<int>();
@@ -157,7 +178,7 @@ namespace StkStubaki.Business.Services
                     if (headToHeadInfos.ContainsKey(headToHeadKey))
                     {
                         hasHeadToHead = true;
-                        var headToHead = TeamHeadToHeadInfos[headToHeadKey];
+                        var headToHead = headToHeadInfos[headToHeadKey];
                         headToHeadInfo[headToHead.Info1.ID].Aggregate(headToHead.Info1);
                         headToHeadInfo[headToHead.Info2.ID].Aggregate(headToHead.Info2);
                     }
@@ -193,16 +214,15 @@ namespace StkStubaki.Business.Services
 
             populateTeamCompetitionInfo(TeamCompetitionInfos[game.IdDomacin], TeamCompetitionInfos[game.IdGost], game);
         }
-        private void populateHeadToHead(Utakmica game)
-        {
-            HeadToHeadKey key = new HeadToHeadKey(game.IdDomacin, game.IdGost);
-            if (!TeamHeadToHeadInfos.ContainsKey(key))
-            {
-                TeamHeadToHeadInfos.Add(key, new HeadToHeadInfo<TeamCompetitionInfo>(game.IdDomacin, game.IdGost));
-            }
 
-            populateTeamCompetitionInfo(TeamHeadToHeadInfos[key].Info1, TeamHeadToHeadInfos[key].Info2, game);
+        private void insertPlayerInfo(Utakmica game)
+        {
+            foreach (var mec in game.Mecs)
+            {
+                populatePlayerCompetitionInfo(mec);
+            }
         }
+
         private void populateTeamCompetitionInfo(TeamCompetitionInfo info1, TeamCompetitionInfo info2, Utakmica game)
         {
             var infoDomacin = info1.ID == game.IdDomacin ? info1 : info2;
@@ -232,7 +252,7 @@ namespace StkStubaki.Business.Services
 
             foreach (var mec in game.Mecs)
             {
-                foreach(var set in mec.SetMecs)
+                foreach (var set in mec.SetMecs)
                 {
                     infoDomacin.PointsWon += set.PoenDom;
                     infoDomacin.PointsLost += set.PoenGost;
@@ -240,6 +260,72 @@ namespace StkStubaki.Business.Services
                     infoGost.PointsLost += set.PoenDom;
                 }
             }
+        }
+
+        private void populatePlayerCompetitionInfo(Mec game)
+        {
+            if (!PlayerCompetitionInfos.ContainsKey(game.IdDomaciIgrac ?? 0))
+            {
+                PlayerCompetitionInfos.Add(game.IdDomaciIgrac ?? 0, new PlayerCompetitionInfo(game.IdDomaciIgrac ?? 0));
+            }
+
+            if (!PlayerCompetitionInfos.ContainsKey(game.IdGostujuciIgrac ?? 0))
+            {
+                PlayerCompetitionInfos.Add(game.IdGostujuciIgrac ?? 0, new PlayerCompetitionInfo(game.IdGostujuciIgrac ?? 0));
+            }
+
+            var infoDomacin = PlayerCompetitionInfos[game.IdDomaciIgrac ?? 0];
+            var infoGost = PlayerCompetitionInfos[game.IdGostujuciIgrac ?? 0];
+            populatePlayerCompetitionInfo(game, infoDomacin, infoGost);
+
+            HeadToHeadKey key = new HeadToHeadKey(game.IdDomaciIgrac ?? 0, game.IdGostujuciIgrac ?? 0);
+            if (!PlayerHeadToHeadInfos.ContainsKey(key))
+            {
+                PlayerHeadToHeadInfos.Add(key, new HeadToHeadInfo<PlayerCompetitionInfo>(game.IdDomaciIgrac ?? 0, game.IdGostujuciIgrac ?? 0));
+            }
+
+            populatePlayerCompetitionInfo(game, PlayerHeadToHeadInfos[key].Info1, PlayerHeadToHeadInfos[key].Info2);
+        }
+
+        private static void populatePlayerCompetitionInfo(Mec game, PlayerCompetitionInfo info1, PlayerCompetitionInfo info2)
+        {
+            var infoDomacin = info1.ID == game.IdDomaciIgrac ? info1 : info2;
+            var infoGost = info1.ID == game.IdDomaciIgrac ? info2 : info1;
+
+            if (game.DobSetoviDom > game.DobSetoviGost)
+            {
+                infoDomacin.Wins++;
+                infoGost.Loses++;
+            }
+            else
+            {
+                infoGost.Wins++;
+                infoDomacin.Loses++;
+            }
+
+            infoDomacin.SetsWon += game.DobSetoviDom ?? 0;
+            infoDomacin.SetsLost += game.DobSetoviGost ?? 0;
+            infoGost.SetsWon += game.DobSetoviGost ?? 0;
+            infoGost.SetsLost += game.DobSetoviDom ?? 0;
+
+            foreach (var set in game.SetMecs)
+            {
+                infoDomacin.PointsWon += set.PoenDom;
+                infoDomacin.PointsLost += set.PoenGost;
+                infoGost.PointsWon += set.PoenGost;
+                infoGost.PointsLost += set.PoenDom;
+            }
+        }
+
+        private void populateHeadToHead(Utakmica game)
+        {
+            HeadToHeadKey key = new HeadToHeadKey(game.IdDomacin, game.IdGost);
+            if (!TeamHeadToHeadInfos.ContainsKey(key))
+            {
+                TeamHeadToHeadInfos.Add(key, new HeadToHeadInfo<TeamCompetitionInfo>(game.IdDomacin, game.IdGost));
+            }
+
+            populateTeamCompetitionInfo(TeamHeadToHeadInfos[key].Info1, TeamHeadToHeadInfos[key].Info2, game);
         }
         #endregion
     }

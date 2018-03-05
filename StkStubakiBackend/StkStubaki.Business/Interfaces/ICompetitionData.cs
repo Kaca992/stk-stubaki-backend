@@ -9,6 +9,6 @@ namespace StkStubaki.Business.Interfaces
     public interface ICompetitionData: IAggregatable, IComparable
     {
         int ID { get; set; }
-        int Points { get; set; }
+        int Points { get; }
     }
 }

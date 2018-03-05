@@ -43,11 +43,13 @@ namespace StkStubaki.Web.Controllers
             await Task.WhenAll(teams, players, winRatios);
 
             var sortedTeams = competitionService.SortTeams(teams.Result);
-            await Task.WhenAll(sortedTeams);
+            var sortedPlayers = competitionService.SortPlayers(players.Result);
+            await Task.WhenAll(sortedTeams, sortedPlayers);
 
             var teamHeadToHeads = HeadToHeadHelper.GenerateHeadToHeadInfoDTO(competitionService.TeamHeadToHeadInfos);
+            var playerHeadToHeads = HeadToHeadHelper.GenerateHeadToHeadInfoDTO(competitionService.PlayerHeadToHeadInfos);
 
-            return Ok(new { teams = sortedTeams.Result, players = players.Result, teamHeadToHeads = teamHeadToHeads });
+            return Ok(new { teams = sortedTeams.Result, players = sortedPlayers.Result, teamHeadToHeads = teamHeadToHeads, playerHeadToHeads = playerHeadToHeads });
         }
     }
 }
